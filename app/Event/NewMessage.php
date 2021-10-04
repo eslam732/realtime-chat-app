@@ -32,6 +32,6 @@ public $message;
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat');
+        return new PresenceChannel('chat.'.$this->message->chat_id);
     }
 }

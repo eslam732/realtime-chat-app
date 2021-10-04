@@ -45,7 +45,7 @@ class ChatsController extends Controller
             $user1chat['chat_id'] = $chat_id;
             ChatUsers::create($user1chat);
             $user2chat = [];
-            $user2chat['user_id'] = request()->reciver_id;
+            $user2chat['user_id'] = request()->reciverId;
             $user2chat['chat_id'] = $chat_id;
             ChatUsers::create($user2chat);
 
@@ -55,7 +55,7 @@ class ChatsController extends Controller
             $messageData['chat_id'] = $chat_id;
 
             $message=Message::create($messageData);
-            broadcast(new NewMessage($message));
+            broadcast(new NewMessage($message))->toOthers();
             return response()->json(['messages' => $message], 200);
 
         }
@@ -65,17 +65,25 @@ class ChatsController extends Controller
         $messageData['chat_id'] = request()->chatId;
 
         $message= Message::create($messageData);
-        broadcast(new NewMessage($message));
+        broadcast(new NewMessage($message))->toOthers();
         
         return response()->json(['messages' => $message], 200);
     }
 
-    public function userMessages()
+    public function userChats()
     {
         $user = Auth::user();
-        $creator = $user;
-        $messages = $creator->messages;
-        return response()->json(['messages' => $messages], 200);
+        $user=User::find($user->id);
+    
+        //$chats = $user->chats()->with('messages')->get();
+
+        $chats=DB::select(DB::raw("
+        SELECT * FROM users 
+        join  chat_users on users.id=chat_users.user_id
+        where (users.id=$user->id)
+           
+        "));
+        return response()->json(['chats' => $chats], 200);
     }
 
     public function chatMessages($chatId)

@@ -24,6 +24,6 @@ Route::post('signup',[AuthController::class,'signUp']);
 Route::post('login',[AuthController::class,'login']);
 Route::get('UnAuthorized',[AuthController::class,'UnAuthorized'])->name('UnAuthorized'); 
 Route::post('send',[ChatsController::class,'sendMessage']);
-Route::get('usermessages',[ChatsController::class,'userMessages']);
+Route::get('userchats',[ChatsController::class,'userChats']);
 Route::get('getchats',[ChatsController::class,'getChats']);
 Route::get('chatmessages/{chatId}',[ChatsController::class,'chatMessages']);

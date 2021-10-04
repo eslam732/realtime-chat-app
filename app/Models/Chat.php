@@ -10,7 +10,7 @@ class Chat extends Model
     use HasFactory;
 
     protected $_fillable = [
-     
+     'type'
     ];
     protected $hidden = [
         'password',
